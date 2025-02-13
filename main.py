@@ -227,10 +227,15 @@ def edit_post(post_id):
 
 
 # TODO: Use a decorator so only an admin user can delete a post
-@app.route("/delete/<int:post_id>")
+@app.route("/delete/<int:post_id>",methods=['POST','GET'])
 @admin_only
 def delete_post(post_id):
-    post_to_delete = db.get_or_404(BlogPost, post_id)
+    all_comments=db.session.execute(db.select(Comment).where(Comment.post_id==post_id)).scalars()
+    post_to_delete = db.session.execute(db.select(BlogPost).where(BlogPost.id==post_id)).scalar()
+    print(post_to_delete.title)
+    for comment in all_comments:
+        db.session.delete(comment)
+
     db.session.delete(post_to_delete)
     db.session.commit()
     return redirect(url_for('get_all_posts'))
