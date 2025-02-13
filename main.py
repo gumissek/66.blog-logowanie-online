@@ -194,7 +194,7 @@ def add_new_post():
         subtitle = request.form['subtitle']
         img_url = request.form['img_url']
         body = request.form['body']
-        current_date = datetime.datetime.today()
+        current_date = datetime.datetime.today().strftime('%Y-%m-%d')
         new_post = BlogPost(title=title, subtitle=subtitle, date=current_date, img_url=img_url, body=body,
                             author_id=current_user.id)
         db.session.add(new_post)
@@ -260,4 +260,4 @@ def contact():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, port=5002)
+    app.run(debug=True, port=5002)
