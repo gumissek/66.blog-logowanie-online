@@ -1,3 +1,4 @@
+import datetime
 import smtplib
 from datetime import date
 from flask import Flask, abort, render_template, redirect, url_for, flash, request
@@ -14,7 +15,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from forms import CreatePostForm, RegisterForm, LoginForm, EditForm
 # from dotenv import load_dotenv
 import os
-
 
 MY_MAIL = os.getenv('MY_MAIL')
 MY_MAIL_PASSWORD = os.getenv('MY_MAIL_PASSWORD')
@@ -190,14 +190,13 @@ def show_post(post_id):
 def add_new_post():
     form = CreatePostForm()
     if form.validate_on_submit():
-        new_post = BlogPost(
-            title=form.title.data,
-            subtitle=form.subtitle.data,
-            body=form.body.data,
-            img_url=form.img_url.data,
-            author=current_user.id,
-            date=date.today().strftime("%B %d, %Y")
-        )
+        title = request.form['title']
+        subtitle = request.form['subtitle']
+        img_url = request.form['img_url']
+        body = request.form['body']
+        current_date = datetime.datetime.today()
+        new_post = BlogPost(title=title, subtitle=subtitle, date=current_date, img_url=img_url, body=body,
+                            author_id=current_user.id)
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
