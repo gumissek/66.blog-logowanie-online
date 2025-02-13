@@ -265,4 +265,3 @@ def contact():
 if __name__ == "__main__":
     app.run(debug=False, port=5002)
 
-#todo zrobilem wysyalnie maila dokonczyc z wsgi server
