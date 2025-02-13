@@ -12,15 +12,13 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 # Import your forms from the forms.py
 from forms import CreatePostForm, RegisterForm, LoginForm, EditForm
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
-load_dotenv()
 
-MY_MAIL= os.getenv('MY_MAIL')
-MY_MAIL_PASSWORD= os.getenv('MY_MAIL_PASSWORD')
+MY_MAIL = os.getenv('MY_MAIL')
+MY_MAIL_PASSWORD = os.getenv('MY_MAIL_PASSWORD')
 MY_MAIL_SMTP = os.getenv('MY_MAIL_SMTP')
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('FLASK_KEY')
@@ -264,4 +262,3 @@ def contact():
 
 if __name__ == "__main__":
     app.run(debug=False, port=5002)
-
