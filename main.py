@@ -37,10 +37,7 @@ loginmanager = LoginManager()
 loginmanager.init_app(app)
 
 
-# tworze loginloadera aby zwracal current_user
-@loginmanager.user_loader
-def load_user(user_id):
-    return db.get_or_404(User, user_id)
+
 
 
 # robie dekorator ktory sprawdza czy zalogowane kotno to admin
@@ -64,6 +61,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI',
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
+
+# tworze loginloadera aby zwracal current_user
+@loginmanager.user_loader
+def load_user(user_id):
+    logged_user=db.session.execute(db.select(User).where(User.id==user_id)).scalar()
+    if logged_user:
+        return logged_user
+
+    # return db.get_or_404(User, user_id)
 
 # CONFIGURE TABLES
 class BlogPost(db.Model):
@@ -265,4 +271,4 @@ def contact():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, port=5002)
+    app.run(debug=True, port=5002)
